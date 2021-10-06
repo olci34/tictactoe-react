@@ -4,9 +4,8 @@ import checkWinner from "./checkWinner.js";
 class Game extends Component {
     constructor(props) {
         super(props)
-        this.state = {board: Array(9).fill(null), xIsNext: true, winner: null}
+        this.state = {board: Array(9).fill(null), xIsNext: true}
     }
-
     
     onClick = (i) => { 
         const winner = checkWinner(this.state.board)
@@ -24,7 +23,9 @@ class Game extends Component {
                     <p>
                         {winner ? "Winner: " + winner : "Next Player: " + (this.state.xIsNext ? "X" : "O")}
                     </p>
+                    <button onClick={() => this.setState({board: Array(9).fill(null), xIsNext: true})}>Reset</button>
                 </div>
+
             </>
         )
     }
