@@ -7,7 +7,7 @@ class Square extends Component {
     }
     render() {
         return (
-            <div className="square" onClick={() => this.props.onClick}>{this.value}</div>
+            <div className="square" onClick={this.props.onClick}>{this.value}</div>
         )
     }
 }
