@@ -4,10 +4,11 @@ import checkWinner from "./checkWinner.js";
 class Game extends Component {
     constructor(props) {
         super(props)
-        this.state = {board: Array(9).fill(null), xIsNext: true}
+        this.state = {board: Array(9).fill(null), xIsNext: true, winner: null}
     }
 
-    onClick = (i) => {
+    
+    onClick = (i) => { 
         const winner = checkWinner(this.state.board)
         const boardCopy = [...this.state.board]
         if (winner || boardCopy[i]) return;
@@ -15,10 +16,16 @@ class Game extends Component {
         this.setState({board: boardCopy, xIsNext: !this.state.xIsNext})
     }
     render() {
+        const winner = checkWinner(this.state.board)
         return (
-            <div>
+            <>
                 <Board squares={this.state.board} handleClick={this.onClick}/>
-            </div>
+                <div id='winner-div'>
+                    <p>
+                        {winner ? "Winner: " + winner : "Next Player: " + (this.state.xIsNext ? "X" : "O")}
+                    </p>
+                </div>
+            </>
         )
     }
 }
