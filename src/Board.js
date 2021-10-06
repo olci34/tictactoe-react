@@ -1,19 +1,13 @@
 import React, { Component } from "react";
 import Square from "./Square";
 class Board extends Component {
-  handleClick = () => console.log("square click is handled");
   render() {
+    console.log("board rendered");
     return (
       <div id="board">
-        <Square value="1" onClick={this.handleClick} />
-        <Square value="2" onClick={this.handleClick} />
-        <Square value="3" onClick={this.handleClick} />
-        <Square value="4" onClick={this.handleClick} />
-        <Square value="5" onClick={this.handleClick} />
-        <Square value="6" onClick={this.handleClick} />
-        <Square value="7" onClick={this.handleClick} />
-        <Square value="8" onClick={this.handleClick} />
-        <Square value="9" onClick={this.handleClick} />
+        {this.props.squares.map((square, index) => (
+          <Square key={index} value={square} onClick={this.props.handleClick} />
+        ))}
       </div>
     );
   }
