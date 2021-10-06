@@ -4,28 +4,45 @@ import checkWinner from "./checkWinner.js";
 class Game extends Component {
     constructor(props) {
         super(props)
-        this.state = {board: Array(9).fill(null), xIsNext: true}
+        this.state = {boardHistory: [Array(9).fill(null)], xIsNext: true, stepNumber: 0}
     }
     
-    onClick = (i) => { 
-        const winner = checkWinner(this.state.board)
-        const boardCopy = [...this.state.board]
-        if (winner || boardCopy[i]) return;
-        boardCopy[i] = this.state.xIsNext ? "X" : "O";
-        this.setState({board: boardCopy, xIsNext: !this.state.xIsNext})
+    onClick = (i) => {
+        const history = this.state.boardHistory.slice(0, this.state.stepNumber + 1)
+        const currBoard = [...history[this.state.stepNumber]]
+        const winner = checkWinner(currBoard)
+        if (winner || currBoard[i]) return;
+        currBoard[i] = this.state.xIsNext ? "X" : "O";
+        const newBoardHistory = [...this.state.boardHistory, currBoard]
+        this.setState({boardHistory: newBoardHistory, xIsNext: !this.state.xIsNext, stepNumber: history.length})
     }
+
+    jumpTo = (stepNumber) => {
+        const nextPlayer = (stepNumber % 2 === 0)
+        this.setState({...this.state, stepNumber: stepNumber, xIsNext: nextPlayer})
+    }
+
+    renderMoves = () => {
+        const moves = this.state.boardHistory.map((_board, move) => {
+            const destination = move ? `Go to move #${move}` : 'Go to Start'
+            return (
+                <li key={move}>
+                    <button onClick={() => this.jumpTo(move)}>{destination}</button>
+                </li>
+            )
+        })
+        return moves
+    }
+
     render() {
-        const winner = checkWinner(this.state.board)
+        const currBoard = this.state.boardHistory[this.state.stepNumber]
+        const winner = checkWinner(currBoard)
         return (
             <>
-                <Board squares={this.state.board} handleClick={this.onClick}/>
-                <div id='winner-div'>
-                    <p>
-                        {winner ? "Winner: " + winner : "Next Player: " + (this.state.xIsNext ? "X" : "O")}
-                    </p>
-                    <button onClick={() => this.setState({board: Array(9).fill(null), xIsNext: true})}>Reset</button>
-                </div>
-
+                <Board squares={currBoard} handleClick={this.onClick}/>
+                <p> {winner ? "Winner: " + winner : "Next Player: " + (this.state.xIsNext ? "X" : "O")} </p>
+                {this.renderMoves()}
+                <button onClick={() => this.setState({boardHistory: [Array(9).fill(null)], xIsNext: true, stepNumber: 0})}>Reset</button>
             </>
         )
     }
