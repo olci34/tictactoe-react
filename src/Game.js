@@ -13,7 +13,7 @@ class Game extends Component {
         const winner = checkWinner(currBoard)
         if (winner || currBoard[i]) return;
         currBoard[i] = this.state.xIsNext ? "X" : "O";
-        const newBoardHistory = [...this.state.boardHistory, currBoard]
+        const newBoardHistory = [...history, currBoard]
         this.setState({boardHistory: newBoardHistory, xIsNext: !this.state.xIsNext, stepNumber: history.length})
     }
 
