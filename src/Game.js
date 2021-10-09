@@ -7,13 +7,23 @@ const Game = (props) => {
     const [boardHistory, setBoardHistory] = useState([Array(9).fill(null)])
     const [xIsNext, setXisNext] = useState(true)
     const [stepNumber, setStepNumber] = useState(0)
+    const winner = checkWinner(boardHistory[stepNumber])
 
-    const currBoard = boardHistory[stepNumber]
-    const onClick = (num) => console.log(`square ${num} is clicked`)
-
+    const onClick = (i) => {
+        const history = boardHistory.slice(0, stepNumber + 1);
+        const newBoard = [...history[stepNumber]];
+        if (newBoard[i] || winner) return;
+        newBoard[i] = xIsNext ? "X" : "O"
+        setBoardHistory([...history, newBoard])
+        setStepNumber(history.length)
+        setXisNext(!xIsNext)
+    }
+    
     return (
         <>
-            <Board squares={currBoard} handleClick={onClick}/>
+            <Board squares={boardHistory[stepNumber]} handleClick={onClick}/>
+            <p> {winner ? "Winner: " + winner : "Next Player: " + (xIsNext ? "X" : "O")} </p>
+            
         </>
     )
 }
