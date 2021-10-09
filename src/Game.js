@@ -18,12 +18,18 @@ const Game = (props) => {
         setStepNumber(history.length)
         setXisNext(!xIsNext)
     }
+
+    const resetGame = () => {
+        setBoardHistory([Array(9).fill(null)]);
+        setStepNumber(0);
+        setXisNext(true);
+    }
     
     return (
         <>
             <Board squares={boardHistory[stepNumber]} handleClick={onClick}/>
             <p> {winner ? "Winner: " + winner : "Next Player: " + (xIsNext ? "X" : "O")} </p>
-            
+            <button onClick={resetGame}>Reset</button>
         </>
     )
 }
